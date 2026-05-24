@@ -1,12 +1,11 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { SectionHeader } from "./Services";
-import { Mail, MapPin, Phone, ArrowRight, CheckCircle2 } from "lucide-react";
+import { Mail, Phone, ArrowRight, CheckCircle2 } from "lucide-react";
 
 const INFO = [
-  { icon: Mail, label: "Email us", value: "hello@zelvo.io", href: "mailto:hello@zelvo.io" },
-  { icon: Phone, label: "Call us", value: "+1 (800) ZELVO-IO", href: "tel:+18009358646" },
-  { icon: MapPin, label: "Offices", value: "Dubai · Karachi · Remote", href: "#" },
+  { icon: Mail, label: "Email us", value: "abiram.ketheeswaran@gmail.com", href: "mailto:abiram.ketheeswaran@gmail.com" },
+  { icon: Phone, label: "Call us", value: "+94 773165797", href: "tel:+94773165797" },
 ];
 
 const SERVICES = [
@@ -87,10 +86,10 @@ export function Contact() {
           {/* ── Right — Form ── */}
           <motion.div
             initial={{ opacity: 0, x: 20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
+            animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
             className="rounded-2xl glass-strong p-6 sm:p-8"
+            style={{ willChange: "auto" }}
           >
             {submitted ? (
               <motion.div
