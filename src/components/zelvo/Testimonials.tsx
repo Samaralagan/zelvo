@@ -19,10 +19,10 @@ const items = [
 
 export function Testimonials() {
   return (
-    <section className="relative py-24 sm:py-32">
+    <section className="relative py-14 sm:py-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <SectionHeader eyebrow="Testimonials" title="Trusted by teams that ship." />
-        <div className="mt-14 grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4">
           {items.map((t, i) => (
             <motion.figure
               key={t.name}

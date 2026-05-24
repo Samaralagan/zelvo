@@ -4,12 +4,12 @@ import { Hero } from "@/components/zelvo/Hero";
 import { Services } from "@/components/zelvo/Services";
 import { Why } from "@/components/zelvo/Why";
 import { Process } from "@/components/zelvo/Process";
-import { CaseStudies } from "@/components/zelvo/CaseStudies";
+import { Contact } from "@/components/zelvo/Contact";
 import { Tech } from "@/components/zelvo/Tech";
 import { Security } from "@/components/zelvo/Security";
-import { Testimonials } from "@/components/zelvo/Testimonials";
-import { CTA } from "@/components/zelvo/CTA";
 import { Footer } from "@/components/zelvo/Footer";
+import { CookieBanner } from "@/components/zelvo/CookieBanner";
+import { Chatbot } from "@/components/zelvo/Chatbot";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -59,12 +59,12 @@ function Index() {
       <Services />
       <Why />
       <Process />
-      <CaseStudies />
       <Tech />
       <Security />
-      <Testimonials />
-      <CTA />
+      <Contact />
       <Footer />
+      <CookieBanner />
+      <Chatbot />
     </main>
   );
 }

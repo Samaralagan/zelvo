@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Shield, Lock, ServerCog, Activity } from "lucide-react";
+import { Lock, ServerCog, Activity } from "lucide-react";
 import { SectionHeader } from "./Services";
 
 const items = [
@@ -10,7 +10,7 @@ const items = [
 
 export function Security() {
   return (
-    <section className="relative py-24 sm:py-32 bg-surface/40 overflow-hidden">
+    <section className="relative py-7 sm:py-10 overflow-hidden">
       <div
         className="absolute inset-0 pointer-events-none opacity-50"
         style={{ background: "var(--grad-hero)" }}
@@ -23,7 +23,7 @@ export function Security() {
             title="Built with Security, Stability, and Scale in Mind."
             sub="Security isn't a feature we add later — it's the foundation we build on."
           />
-          <div className="mt-10 space-y-3">
+          <div className="mt-6 space-y-3">
             {items.map((it, i) => (
               <motion.div
                 key={it.title}
@@ -50,24 +50,13 @@ export function Security() {
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="relative aspect-square max-w-md mx-auto"
+          className="relative max-w-md mx-auto"
         >
-          <div className="absolute inset-0 rounded-full bg-highlight/10 blur-3xl animate-pulse-glow" />
-          {[1, 2, 3].map((r) => (
-            <div
-              key={r}
-              className="absolute inset-0 rounded-full border border-highlight/20 animate-pulse-glow"
-              style={{
-                inset: `${r * 12}%`,
-                animationDelay: `${r * 0.3}s`,
-              }}
-            />
-          ))}
-          <div className="absolute inset-0 grid place-items-center">
-            <div className="relative h-32 w-32 rounded-2xl glass-strong grid place-items-center glow-ring">
-              <Shield className="h-14 w-14 text-highlight" strokeWidth={1.5} />
-            </div>
-          </div>
+          <img
+            src="/trust_side_img.png"
+            alt="Security illustration"
+            className="w-full h-auto object-contain drop-shadow-xl"
+          />
         </motion.div>
       </div>
     </section>

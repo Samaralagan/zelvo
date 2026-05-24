@@ -40,68 +40,82 @@
 /* Zelvo brand tokens — dark by default */
 :root {
   --radius: 0.875rem;
-  /* #212121 */
-  --background: oklch(0.265 0 0);
-  /* #323232 */
-  --surface: oklch(0.345 0 0);
-  --foreground: oklch(0.985 0 0);
+  /* Rich near-black with a subtle cool tint */
+  --background: oklch(0.14 0.008 240);
+  --surface: oklch(0.19 0.008 240);
+  --foreground: oklch(0.97 0 0);
 
-  --card: oklch(0.305 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.305 0 0);
-  --popover-foreground: oklch(0.985 0 0);
+  --card: oklch(0.18 0.01 230);
+  --card-foreground: oklch(0.97 0 0);
+  --popover: oklch(0.18 0.01 230);
+  --popover-foreground: oklch(0.97 0 0);
 
-  /* #0D7377 deep teal */
-  --primary: oklch(0.5 0.07 195);
+  /* Deep teal primary */
+  --primary: oklch(0.52 0.1 195);
   --primary-foreground: oklch(0.99 0 0);
 
-  --secondary: oklch(0.345 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.22 0.01 230);
+  --secondary-foreground: oklch(0.97 0 0);
 
-  --muted: oklch(0.345 0 0);
-  --muted-foreground: oklch(0.72 0.005 240);
+  --muted: oklch(0.22 0.01 230);
+  --muted-foreground: oklch(0.65 0.01 220);
 
-  --accent: oklch(0.5 0.07 195);
+  --accent: oklch(0.52 0.1 195);
   --accent-foreground: oklch(0.99 0 0);
 
-  /* #14FFEC neon cyan highlight */
-  --highlight: oklch(0.92 0.16 185);
-  --highlight-foreground: oklch(0.2 0 0);
+  /* Vivid neon cyan highlight */
+  --highlight: oklch(0.88 0.18 185);
+  --highlight-foreground: oklch(0.12 0.02 220);
 
   --destructive: oklch(0.577 0.245 27.325);
   --destructive-foreground: oklch(0.984 0 0);
 
-  --border: oklch(1 0 0 / 8%);
-  --input: oklch(1 0 0 / 10%);
-  --ring: oklch(0.92 0.16 185 / 60%);
+  --border: oklch(1 0 0 / 9%);
+  --input: oklch(1 0 0 / 8%);
+  --ring: oklch(0.88 0.18 185 / 55%);
 
-  --grad-hero: radial-gradient(ellipse at top, oklch(0.5 0.07 195 / 0.25), transparent 60%);
-  --grad-glow: radial-gradient(circle, oklch(0.92 0.16 185 / 0.35), transparent 70%);
-  --shadow-glow: 0 0 40px -10px oklch(0.92 0.16 185 / 0.35);
-  --shadow-card: 0 10px 40px -15px oklch(0 0 0 / 0.6);
+  --grad-hero: radial-gradient(ellipse at top, oklch(0.52 0.1 195 / 0.3), transparent 60%);
+  --grad-glow: radial-gradient(circle, oklch(0.88 0.18 185 / 0.4), transparent 70%);
+  --shadow-glow: 0 0 50px -8px oklch(0.88 0.18 185 / 0.45);
+  --shadow-card: 0 12px 48px -12px oklch(0 0 0 / 0.75);
 }
 
 .light {
-  --background: oklch(0.99 0 0);
-  --surface: oklch(0.96 0 0);
-  --foreground: oklch(0.18 0 0);
+  /* Warm off-white — not pure white, avoids harshness */
+  --background: oklch(0.975 0.003 240);
+  --surface: oklch(0.945 0.005 230);
+  --foreground: oklch(0.12 0.01 240);
+
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.18 0 0);
+  --card-foreground: oklch(0.12 0.01 240);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.18 0 0);
-  --primary: oklch(0.5 0.07 195);
+  --popover-foreground: oklch(0.12 0.01 240);
+
+  /* Richer teal — visible on white */
+  --primary: oklch(0.44 0.12 195);
   --primary-foreground: oklch(0.99 0 0);
-  --secondary: oklch(0.96 0 0);
-  --secondary-foreground: oklch(0.18 0 0);
-  --muted: oklch(0.95 0 0);
-  --muted-foreground: oklch(0.45 0 0);
-  --accent: oklch(0.5 0.07 195);
+
+  --secondary: oklch(0.94 0.005 230);
+  --secondary-foreground: oklch(0.12 0.01 240);
+
+  --muted: oklch(0.93 0.005 230);
+  --muted-foreground: oklch(0.38 0.01 230);
+
+  --accent: oklch(0.44 0.12 195);
   --accent-foreground: oklch(0.99 0 0);
-  --highlight: oklch(0.7 0.16 185);
-  --highlight-foreground: oklch(0.18 0 0);
+
+  /* Deep teal highlight — readable on light bg */
+  --highlight: oklch(0.44 0.14 192);
+  --highlight-foreground: oklch(0.99 0 0);
+
   --border: oklch(0 0 0 / 10%);
-  --input: oklch(0 0 0 / 12%);
-  --ring: oklch(0.5 0.07 195 / 50%);
+  --input: oklch(0 0 0 / 7%);
+  --ring: oklch(0.44 0.12 195 / 45%);
+
+  --grad-hero: radial-gradient(ellipse at top, oklch(0.44 0.12 195 / 0.1), transparent 60%);
+  --grad-glow: radial-gradient(circle, oklch(0.44 0.14 192 / 0.12), transparent 70%);
+  --shadow-glow: 0 0 40px -10px oklch(0.44 0.14 192 / 0.22);
+  --shadow-card: 0 8px 32px -8px oklch(0 0 0 / 0.1);
 }
 
 @layer base {
@@ -124,24 +138,84 @@
 }
 
 @layer utilities {
-  .glass {
-    background: color-mix(in oklab, var(--surface) 60%, transparent);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-    border: 1px solid color-mix(in oklab, white 8%, transparent);
-  }
-  .glass-strong {
-    background: color-mix(in oklab, var(--card) 75%, transparent);
+  .zelvo-cookie-container {
+    position: fixed;
+    bottom: 1.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+    width: calc(100% - 2rem);
+    max-width: 560px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+    border-radius: 1rem;
+    background: color-mix(in oklab, var(--card) 90%, transparent);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    border: 1px solid color-mix(in oklab, white 10%, transparent);
+    border: 1px solid var(--color-border);
+    box-shadow: 0 16px 48px -8px oklch(0 0 0 / 0.4);
+  }
+  .zelvo-cookie-content {
+    flex: 1;
+    font-size: 0.875rem;
+  }
+  .zelvo-cookie-accept {
+    flex-shrink: 0;
+    padding: 0.5rem 1.25rem;
+    border-radius: 0.625rem;
+    background: var(--color-highlight);
+    color: var(--color-highlight-foreground);
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s;
+  }
+  .zelvo-cookie-accept:hover { opacity: 0.88; }
+  .zelvo-cookie-decline {
+    flex-shrink: 0;
+    padding: 0.5rem 1rem;
+    border-radius: 0.625rem;
+    background: transparent;
+    border: 1px solid var(--color-border);
+    color: var(--color-muted-foreground);
+    font-size: 0.75rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: color 0.2s;
+  }
+  .zelvo-cookie-decline:hover { color: var(--color-foreground); }
+
+  .glass {
+    background: color-mix(in oklab, var(--surface) 65%, transparent);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid var(--color-border);
+    box-shadow: var(--shadow-card);
+  }
+  .glass-strong {
+    background: color-mix(in oklab, var(--card) 82%, transparent);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--color-border);
+    box-shadow: var(--shadow-card);
+  }
+  .light .glass {
+    background: color-mix(in oklab, var(--card) 80%, transparent);
+    border-color: oklch(0 0 0 / 8%);
+  }
+  .light .glass-strong {
+    background: color-mix(in oklab, var(--card) 92%, transparent);
+    border-color: oklch(0 0 0 / 8%);
   }
   .text-gradient {
     background: linear-gradient(
       135deg,
-      oklch(0.985 0 0) 0%,
-      oklch(0.92 0.16 185) 60%,
-      oklch(0.5 0.07 195) 100%
+      var(--color-foreground) 0%,
+      var(--color-highlight) 60%,
+      var(--color-primary) 100%
     );
     -webkit-background-clip: text;
     background-clip: text;
@@ -149,15 +223,21 @@
   }
   .glow-ring {
     box-shadow:
-      0 0 0 1px color-mix(in oklab, oklch(0.92 0.16 185) 30%, transparent),
-      0 0 30px -5px color-mix(in oklab, oklch(0.92 0.16 185) 40%, transparent);
+      0 0 0 1px color-mix(in oklab, var(--color-highlight) 30%, transparent),
+      0 0 30px -5px color-mix(in oklab, var(--color-highlight) 40%, transparent);
   }
   .grid-bg {
     background-image:
-      linear-gradient(to right, oklch(1 0 0 / 0.04) 1px, transparent 1px),
-      linear-gradient(to bottom, oklch(1 0 0 / 0.04) 1px, transparent 1px);
+      linear-gradient(to right, var(--color-border) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--color-border) 1px, transparent 1px);
     background-size: 56px 56px;
     mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black, transparent 75%);
+  }
+  .logo-img {
+    mix-blend-mode: lighten;
+  }
+  .light .logo-img {
+    mix-blend-mode: normal;
   }
   .noise {
     background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence baseFrequency='0.9' /></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.4'/></svg>");

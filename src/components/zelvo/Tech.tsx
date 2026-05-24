@@ -9,14 +9,14 @@ const tech = [
 
 export function Tech() {
   return (
-    <section id="tech" className="relative py-24 sm:py-32">
+    <section id="tech" className="relative py-7 sm:py-10">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <SectionHeader
           eyebrow="Technologies"
           title="A modern, opinionated stack."
           sub="We pick the right tool for the job — from JVM enterprise platforms to edge-rendered React."
         />
-        <div className="mt-14 grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-7 gap-3">
+        <div className="mt-8 grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-7 gap-3">
           {tech.map((t, i) => (
             <motion.div
               key={t}

@@ -75,7 +75,7 @@ export function CaseStudies() {
               </dl>
               <div className="mt-5 grid grid-cols-3 gap-2">
                 {c.metrics.map((m) => (
-                  <div key={m.l} className="rounded-lg bg-background/60 border border-white/5 p-3">
+                  <div key={m.l} className="rounded-lg bg-background/60 border border-border p-3">
                     <div className="text-base font-bold text-highlight">{m.v}</div>
                     <div className="text-[10px] uppercase tracking-widest text-muted-foreground mt-0.5">{m.l}</div>
                   </div>
