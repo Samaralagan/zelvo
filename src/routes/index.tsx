@@ -9,7 +9,6 @@ import { Security } from "@/components/zelvo/Security";
 import { Contact } from "@/components/zelvo/Contact";
 import { Footer } from "@/components/zelvo/Footer";
 import { CookieBanner } from "@/components/zelvo/CookieBanner";
-import { Chatbot } from "@/components/zelvo/Chatbot";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -64,7 +63,6 @@ function Index() {
       <Contact />
       <Footer />
       <CookieBanner />
-      <Chatbot />
     </main>
   );
 }
