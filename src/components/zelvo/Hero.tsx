@@ -1,8 +1,20 @@
-import { motion, animate, useMotionValue } from "framer-motion";
-import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
 import { ArrowRight, GitBranch, CheckCircle2, Loader2, Zap } from "lucide-react";
 
-/* ── Typing code panel ── */
+function useVisible() {
+  const ref = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(([e]) => setVisible(e.isIntersecting), { threshold: 0.1 });
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+  return { ref, visible };
+}
+
 const CODE = [
   { t: "import { ERP } from '@zelvo/core'", h: false },
   { t: "import { CloudScale } from '@zelvo/infra'", h: false },
@@ -14,14 +26,15 @@ const CODE = [
   { t: "})", h: true },
 ];
 
-function CodePanel() {
+function CodePanel({ active }: { active: boolean }) {
   const [lineIdx, setLineIdx] = useState(0);
   const [typed, setTyped] = useState("");
 
   useEffect(() => {
+    if (!active) return;
     const target = CODE[lineIdx % CODE.length].t;
     setTyped("");
-    if (!target) { setTimeout(() => setLineIdx((l) => l + 1), 200); return; }
+    if (!target) { const t = setTimeout(() => setLineIdx((l) => l + 1), 200); return () => clearTimeout(t); }
     let i = 0;
     const iv = setInterval(() => {
       i++;
@@ -29,7 +42,7 @@ function CodePanel() {
       if (i >= target.length) { clearInterval(iv); setTimeout(() => setLineIdx((l) => l + 1), 500); }
     }, 36);
     return () => clearInterval(iv);
-  }, [lineIdx]);
+  }, [lineIdx, active]);
 
   const shown = CODE.slice(Math.max(0, (lineIdx % CODE.length) - 5), lineIdx % CODE.length);
 
@@ -53,7 +66,6 @@ function CodePanel() {
   );
 }
 
-/* ── Pipeline panel ── */
 const PIPELINE = [
   { label: "Commit", icon: GitBranch },
   { label: "Build", icon: Loader2 },
@@ -61,13 +73,14 @@ const PIPELINE = [
   { label: "Deploy", icon: Zap },
 ];
 
-function PipelinePanel() {
-  const [active, setActive] = useState(0);
+function PipelinePanel({ active }: { active: boolean }) {
+  const [step, setStep] = useState(0);
   const [done, setDone] = useState<number[]>([]);
 
   useEffect(() => {
+    if (!active) return;
     const iv = setInterval(() => {
-      setActive((a) => {
+      setStep((a) => {
         const next = (a + 1) % PIPELINE.length;
         if (next === 0) setDone([]);
         else setDone((d) => [...d, a]);
@@ -75,41 +88,37 @@ function PipelinePanel() {
       });
     }, 1100);
     return () => clearInterval(iv);
-  }, []);
+  }, [active]);
 
   return (
     <div className="h-full rounded-xl bg-background/60 border border-border p-4 flex flex-col justify-between">
       <div className="text-[10px] uppercase tracking-widest text-muted-foreground mb-3">CI / CD Pipeline</div>
       <div className="flex flex-col gap-2 flex-1 justify-center">
-        {PIPELINE.map((step, i) => {
+        {PIPELINE.map((s, i) => {
           const isDone = done.includes(i);
-          const isActive = active === i;
-          const Icon = step.icon;
+          const isActive = step === i;
+          const Icon = s.icon;
           return (
-            <div key={step.label} className="flex items-center gap-3">
-              <motion.div
-                animate={{
+            <div key={s.label} className="flex items-center gap-3">
+              <div
+                className="h-7 w-7 rounded-lg border grid place-items-center shrink-0 transition-colors duration-300"
+                style={{
                   backgroundColor: isDone ? "oklch(0.88 0.18 185 / 0.25)" : isActive ? "oklch(0.88 0.18 185 / 0.15)" : "oklch(0.5 0 0 / 0.08)",
                   borderColor: isDone ? "oklch(0.88 0.18 185 / 0.8)" : isActive ? "oklch(0.88 0.18 185 / 0.5)" : "oklch(0.5 0 0 / 0.2)",
                 }}
-                transition={{ duration: 0.4 }}
-                className="h-7 w-7 rounded-lg border grid place-items-center shrink-0"
               >
-                <Icon
-                  className={`h-3.5 w-3.5 ${isDone || isActive ? "text-highlight" : "text-muted-foreground/40"} ${isActive && step.label === "Build" ? "animate-spin" : ""}`}
-                />
-              </motion.div>
+                <Icon className={`h-3.5 w-3.5 ${isDone || isActive ? "text-highlight" : "text-muted-foreground/40"} ${isActive && s.label === "Build" ? "animate-spin" : ""}`} />
+              </div>
               <div className="flex-1">
                 <div className="flex items-center justify-between">
-                  <span className={`text-[11px] font-mono ${isDone || isActive ? "text-foreground" : "text-muted-foreground/40"}`}>{step.label}</span>
+                  <span className={`text-[11px] font-mono ${isDone || isActive ? "text-foreground" : "text-muted-foreground/40"}`}>{s.label}</span>
                   {isDone && <span className="text-[9px] text-highlight">✓ done</span>}
                   {isActive && <span className="text-[9px] text-highlight animate-pulse">running…</span>}
                 </div>
                 <div className="mt-1 h-1 rounded-full bg-border overflow-hidden">
-                  <motion.div
-                    className="h-full rounded-full bg-gradient-to-r from-primary to-highlight"
-                    animate={{ width: isDone ? "100%" : isActive ? "60%" : "0%" }}
-                    transition={{ duration: isDone ? 0.3 : 1.0, ease: "easeInOut" }}
+                  <div
+                    className="h-full rounded-full bg-gradient-to-r from-primary to-highlight transition-all duration-500"
+                    style={{ width: isDone ? "100%" : isActive ? "60%" : "0%" }}
                   />
                 </div>
               </div>
@@ -121,7 +130,6 @@ function PipelinePanel() {
   );
 }
 
-/* ── Node cluster panel ── */
 const NODES = [
   { x: "50%", y: "18%", label: "LB" },
   { x: "20%", y: "50%", label: "API" },
@@ -132,17 +140,18 @@ const NODES = [
 ];
 const EDGES = [[0,1],[0,2],[0,3],[1,4],[2,5],[3,4]];
 
-function ClusterPanel() {
+function ClusterPanel({ active }: { active: boolean }) {
   const [pulse, setPulse] = useState(0);
   const [flow, setFlow] = useState<number[]>([]);
 
   useEffect(() => {
+    if (!active) return;
     const iv = setInterval(() => {
       setPulse((v) => (v + 1) % NODES.length);
       setFlow(EDGES[Math.floor(Math.random() * EDGES.length)]);
     }, 700);
     return () => clearInterval(iv);
-  }, []);
+  }, [active]);
 
   return (
     <div className="h-full rounded-xl bg-background/60 border border-border p-3 flex flex-col">
@@ -152,31 +161,20 @@ function ClusterPanel() {
           {EDGES.map(([a, b], i) => {
             const isActive = (flow[0] === a && flow[1] === b) || (flow[0] === b && flow[1] === a);
             return (
-              <motion.line
+              <line
                 key={i}
                 x1={NODES[a].x} y1={NODES[a].y}
                 x2={NODES[b].x} y2={NODES[b].y}
                 stroke="oklch(0.88 0.18 185)"
                 strokeWidth={isActive ? "1.5" : "0.8"}
-                animate={{ opacity: isActive ? 0.9 : 0.2 }}
-                transition={{ duration: 0.3 }}
+                opacity={isActive ? 0.9 : 0.2}
               />
             );
           })}
           {NODES.map((n, i) => (
             <g key={i}>
-              <motion.circle
-                cx={n.x} cy={n.y} r="14"
-                fill="oklch(0.88 0.18 185)"
-                animate={{ opacity: pulse === i ? 0.18 : 0.06, r: pulse === i ? 16 : 14 }}
-                transition={{ duration: 0.3 }}
-              />
-              <motion.circle
-                cx={n.x} cy={n.y} r="6"
-                fill="oklch(0.88 0.18 185)"
-                animate={{ opacity: pulse === i ? 1 : 0.4 }}
-                transition={{ duration: 0.3 }}
-              />
+              <circle cx={n.x} cy={n.y} r={pulse === i ? 16 : 14} fill="oklch(0.88 0.18 185)" opacity={pulse === i ? 0.18 : 0.06} />
+              <circle cx={n.x} cy={n.y} r="6" fill="oklch(0.88 0.18 185)" opacity={pulse === i ? 1 : 0.4} />
               <text x={n.x} y={n.y} textAnchor="middle" dominantBaseline="middle"
                 className="fill-background font-mono"
                 style={{ fontSize: "5px", fontWeight: 700 }}
@@ -189,8 +187,9 @@ function ClusterPanel() {
   );
 }
 
-/* ── Hero ── */
 export function Hero() {
+  const { ref, visible } = useVisible();
+
   return (
     <section id="home" className="relative overflow-hidden pt-28 pb-7 sm:pt-36 sm:pb-10">
       <div className="absolute inset-0 grid-bg" aria-hidden />
@@ -224,37 +223,7 @@ export function Hero() {
           </div>
         </motion.div>
 
-        {/* Innovative visual */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          className="relative mt-12 mx-auto max-w-5xl"
-        >
-          <div className="relative rounded-2xl glass-strong p-3 shadow-[0_30px_80px_-30px_oklch(0_0_0/0.6)]">
-            {/* Window chrome */}
-            <div className="flex items-center justify-between px-4 py-2.5 border-b border-border mb-3">
-              <div className="flex gap-1.5">
-                <span className="h-2.5 w-2.5 rounded-full bg-muted-foreground/30" />
-                <span className="h-2.5 w-2.5 rounded-full bg-muted-foreground/30" />
-                <span className="h-2.5 w-2.5 rounded-full bg-muted-foreground/30" />
-              </div>
-              <div className="text-[10px] tracking-widest text-muted-foreground">ZELVO · PLATFORM STUDIO</div>
-              <motion.div
-                className="h-2 w-2 rounded-full bg-highlight"
-                animate={{ opacity: [1, 0.3, 1] }}
-                transition={{ duration: 1.5, repeat: Infinity }}
-              />
-            </div>
-
-            {/* Three panels */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 h-56">
-              <CodePanel />
-              <PipelinePanel />
-              <ClusterPanel />
-            </div>
-          </div>
-        </motion.div>
+       
       </div>
     </section>
   );

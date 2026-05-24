@@ -216,9 +216,7 @@ function HeartbeatVisual() {
       </div>
       <svg viewBox={`0 0 ${w} ${h}`} className="w-full flex-1" preserveAspectRatio="none">
         <polyline points={pts} fill="none" stroke="oklch(0.92 0.16 185)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-        <polyline points={pts} fill="oklch(0.92 0.16 185 / 0.06)" stroke="none"
-          points={`0,${h} ${pts} ${w},${h}`}
-        />
+        <polyline points={`0,${h} ${pts} ${w},${h}`} fill="oklch(0.92 0.16 185 / 0.06)" stroke="none" />
       </svg>
     </div>
   );
