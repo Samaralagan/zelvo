@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { motion } from "framer-motion";
 import { SectionHeader } from "./Services";
 import { Mail, Phone, ArrowRight, CheckCircle2 } from "lucide-react";
 
@@ -40,7 +39,6 @@ export function Contact() {
 
   return (
     <section id="contact" className="relative py-7 sm:py-10 overflow-hidden">
-      {/* background */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{ background: "radial-gradient(ellipse at 70% 50%, oklch(0.5 0.07 195 / 0.18), transparent 60%)" }}
@@ -52,12 +50,7 @@ export function Contact() {
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-start">
 
           {/* ── Left ── */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-          >
+          <div>
             <SectionHeader
               eyebrow="Contact"
               title="Let's build something great together."
@@ -81,22 +74,12 @@ export function Contact() {
                 </a>
               ))}
             </div>
-          </motion.div>
+          </div>
 
           {/* ── Right — Form ── */}
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className="rounded-2xl glass-strong p-6 sm:p-8"
-            style={{ willChange: "auto" }}
-          >
+          <div className="rounded-2xl glass-strong p-6 sm:p-8">
             {submitted ? (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                className="flex flex-col items-center justify-center text-center py-12 gap-4"
-              >
+              <div className="flex flex-col items-center justify-center text-center py-12 gap-4">
                 <CheckCircle2 className="h-14 w-14 text-highlight" strokeWidth={1.5} />
                 <h3 className="text-xl font-semibold">Message received!</h3>
                 <p className="text-sm text-muted-foreground max-w-xs">
@@ -108,7 +91,7 @@ export function Contact() {
                 >
                   Send another message
                 </button>
-              </motion.div>
+              </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="grid sm:grid-cols-2 gap-4">
@@ -159,7 +142,7 @@ export function Contact() {
                 </button>
               </form>
             )}
-          </motion.div>
+          </div>
         </div>
       </div>
     </section>
