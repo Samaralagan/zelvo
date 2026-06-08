@@ -1,4 +1,4 @@
-import "./ContactFormWidget";
+import "./ContactFormWidget?side-effect";
 import { SectionHeader } from "./Services";
 import { Mail, Phone } from "lucide-react";
 
