@@ -16,8 +16,8 @@ function useVisible() {
 }
 
 const CODE = [
-  { t: "import { ERP } from '@zelvo/core'", h: false },
-  { t: "import { CloudScale } from '@zelvo/infra'", h: false },
+  { t: "import { ERP } from '@clarotech/core'", h: false },
+  { t: "import { CloudScale } from '@clarotech/infra'", h: false },
   { t: "", h: false },
   { t: "const app = new ERP({", h: true },
   { t: "  modules: ['finance', 'hr', 'pos'],", h: false },
@@ -215,6 +215,7 @@ export function Hero() {
           <div className="mt-9 flex flex-col sm:flex-row items-center justify-center gap-3">
             <a
               href="#contact"
+              onClick={(e) => { e.preventDefault(); document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' }); }}
               className="group inline-flex items-center gap-2 rounded-xl bg-highlight px-6 py-3 text-sm font-semibold text-highlight-foreground transition-all hover:-translate-y-0.5 hover:shadow-[0_0_32px_-6px_oklch(0.92_0.16_185/0.7)]"
             >
               Get a Free Consultation

@@ -1,17 +1,32 @@
-import { motion, useMotionValue, useTransform, useSpring, animate } from "framer-motion";
+import { motion, useMotionValue, useTransform, useSpring } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { Compass, Code, Rocket, LifeBuoy } from "lucide-react";
 import { SectionHeader } from "./Services";
+
+function useInView(ref: React.RefObject<Element>) {
+  const [inView, setInView] = useState(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(([e]) => setInView(e.isIntersecting), { threshold: 0 });
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [ref]);
+  return inView;
+}
 
 /* ══════════════════════════════════════════
    STEP VISUALS
 ══════════════════════════════════════════ */
 
 function RadarVisual() {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref as React.RefObject<Element>);
   const [angle, setAngle] = useState(0);
   const [dots, setDots] = useState<{ x: number; y: number; age: number }[]>([]);
 
   useEffect(() => {
+    if (!inView) return;
     const iv = setInterval(() => {
       setAngle((a) => {
         const next = (a + 3) % 360;
@@ -28,12 +43,12 @@ function RadarVisual() {
       });
     }, 30);
     return () => clearInterval(iv);
-  }, []);
+  }, [inView]);
 
   const rad = (angle * Math.PI) / 180;
 
   return (
-    <div className="h-full rounded-xl bg-background/50 border border-border relative overflow-hidden flex items-center justify-center">
+    <div ref={ref} className="h-full rounded-xl bg-background/50 border border-border relative overflow-hidden flex items-center justify-center">
       <svg viewBox="0 0 100 100" className="w-full h-full">
         {[14, 28, 42].map((r) => (
           <circle key={r} cx="50" cy="50" r={r} fill="none" stroke="oklch(0.92 0.16 185 / 0.12)" strokeWidth="0.8" />
@@ -72,12 +87,15 @@ const CODE_LINES = [
 ];
 
 function CodeVisual() {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref as React.RefObject<Element>);
   const [line, setLine] = useState(0);
   const [typed, setTyped] = useState("");
   const [commits, setCommits] = useState(0);
 
   useEffect(() => {
-    const target = CODE_LINES[line % CODE_LINES.length].text ?? CODE_LINES[line % CODE_LINES.length].t;
+    if (!inView) return;
+    const target = CODE_LINES[line % CODE_LINES.length].t;
     setTyped("");
     let i = 0;
     const iv = setInterval(() => {
@@ -92,12 +110,12 @@ function CodeVisual() {
       }
     }, 40);
     return () => clearInterval(iv);
-  }, [line]);
+  }, [line, inView]);
 
   const shown = CODE_LINES.slice(Math.max(0, (line % CODE_LINES.length) - 2), line % CODE_LINES.length);
 
   return (
-    <div className="h-full rounded-xl bg-background/50 border border-border p-3 font-mono text-[10px] leading-relaxed overflow-hidden flex flex-col">
+    <div ref={ref} className="h-full rounded-xl bg-background/50 border border-border p-3 font-mono text-[10px] leading-relaxed overflow-hidden flex flex-col">
       <div className="flex items-center justify-between mb-2">
         <div className="flex gap-1">
           {["bg-red-400/60","bg-yellow-400/60","bg-green-400/60"].map((c,i) => (
@@ -122,10 +140,13 @@ function CodeVisual() {
 const STAGES = ["Build", "Test", "Stage", "Prod"];
 
 function RocketVisual() {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref as React.RefObject<Element>);
   const [stage, setStage] = useState(0);
   const [launched, setLaunched] = useState(false);
 
   useEffect(() => {
+    if (!inView) return;
     const iv = setInterval(() => {
       setStage((s) => {
         if (s >= STAGES.length - 1) { setLaunched(true); setTimeout(() => { setLaunched(false); setStage(0); }, 1000); return s; }
@@ -133,10 +154,10 @@ function RocketVisual() {
       });
     }, 900);
     return () => clearInterval(iv);
-  }, []);
+  }, [inView]);
 
   return (
-    <div className="h-full rounded-xl bg-background/50 border border-border p-4 flex flex-col gap-3 justify-center">
+    <div ref={ref} className="h-full rounded-xl bg-background/50 border border-border p-4 flex flex-col gap-3 justify-center">
       <div className="flex items-center gap-1.5">
         {STAGES.map((s, i) => (
           <div key={s} className="flex items-center gap-1.5 flex-1">
@@ -175,10 +196,13 @@ function RocketVisual() {
 }
 
 function HeartbeatVisual() {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref as React.RefObject<Element>);
   const [points, setPoints] = useState<number[]>(Array(30).fill(50));
   const [status, setStatus] = useState<"ok" | "alert">("ok");
 
   useEffect(() => {
+    if (!inView) return;
     const iv = setInterval(() => {
       setPoints((prev) => {
         const next = [...prev.slice(1)];
@@ -193,23 +217,22 @@ function HeartbeatVisual() {
       });
     }, 80);
     return () => clearInterval(iv);
-  }, []);
+  }, [inView]);
 
   const w = 100, h = 40;
   const pts = points.map((v, idx) => `${(idx / (points.length - 1)) * w},${(v / 100) * h}`).join(" ");
 
   return (
-    <div className="h-full rounded-xl bg-background/50 border border-border p-3 flex flex-col justify-between">
+    <div ref={ref} className="h-full rounded-xl bg-background/50 border border-border p-3 flex flex-col justify-between">
       <div className="flex items-center justify-between text-[10px] font-mono">
         <span className="text-muted-foreground">System health</span>
         <motion.span
           animate={{ color: status === "ok" ? "oklch(0.92 0.16 185)" : "oklch(0.6 0.2 25)" }}
           className="flex items-center gap-1"
         >
-          <motion.div
+          <div
             className="w-1.5 h-1.5 rounded-full"
-            animate={{ backgroundColor: status === "ok" ? "oklch(0.92 0.16 185)" : "oklch(0.6 0.2 25)", scale: [1, 1.4, 1] }}
-            transition={{ repeat: Infinity, duration: 1 }}
+            style={{ backgroundColor: status === "ok" ? "oklch(0.92 0.16 185)" : "oklch(0.6 0.2 25)" }}
           />
           {status === "ok" ? "All systems nominal" : "Alert"}
         </motion.span>
@@ -320,12 +343,6 @@ export function Process() {
           {/* Vertical spine — desktop only */}
           <div className="hidden md:block absolute left-1/2 top-0 bottom-0 w-px -translate-x-1/2 overflow-hidden pointer-events-none">
             <div className="absolute inset-0 bg-gradient-to-b from-transparent via-highlight/20 to-transparent" />
-            <motion.div
-              className="absolute inset-x-0 h-32 bg-gradient-to-b from-transparent via-highlight to-transparent"
-              initial={{ top: "-20%" }}
-              animate={{ top: "120%" }}
-              transition={{ duration: 3, repeat: Infinity, repeatDelay: 0.8, ease: "easeInOut" }}
-            />
           </div>
 
           <div className="flex flex-col gap-6 md:gap-8">
@@ -390,11 +407,7 @@ function StepNode({ step: s, index: i }: { step: typeof steps[0]; index: number 
       transition={{ delay: i * 0.15, type: "spring", stiffness: 260, damping: 20 }}
       className="relative h-10 w-10 rounded-full glass-strong border border-highlight/30 grid place-items-center shrink-0"
     >
-      <motion.div
-        className="absolute inset-0 rounded-full border border-highlight/40"
-        animate={{ scale: [1, 1.7, 1], opacity: [0.5, 0, 0.5] }}
-        transition={{ duration: 2.4, repeat: Infinity, delay: i * 0.5 }}
-      />
+      <div className="absolute inset-0 rounded-full border border-highlight/30" />
       <s.icon className="h-4 w-4 text-highlight" />
       <div className="absolute -top-1.5 -right-1.5 h-4 w-4 rounded-full bg-highlight flex items-center justify-center text-[8px] font-bold text-background">
         {i + 1}

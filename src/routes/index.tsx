@@ -13,13 +13,13 @@ import { CookieBanner } from "@/components/zelvo/CookieBanner";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Zelvo — Enterprise Software, ERP & Cloud Solutions" },
+      { title: "Claro Tech — Enterprise Software, ERP & Cloud Solutions" },
       {
         name: "description",
         content:
-          "Zelvo builds scalable ERP systems, custom web applications, SaaS platforms, POS systems and cloud infrastructure for modern enterprises.",
+          "Claro Tech builds scalable ERP systems, custom web applications, SaaS platforms, POS systems and cloud infrastructure for modern enterprises.",
       },
-      { property: "og:title", content: "Zelvo — Engineering Scalable Digital Ecosystems" },
+      { property: "og:title", content: "Claro Tech — Engineering Scalable Digital Ecosystems" },
       { property: "og:description", content: "Enterprise ERP, custom software, cloud infrastructure and POS systems built for scale." },
       { property: "og:type", content: "website" },
       { property: "og:url", content: "/" },
@@ -40,7 +40,7 @@ export const Route = createFileRoute("/")({
         children: JSON.stringify({
           "@context": "https://schema.org",
           "@type": "Organization",
-          name: "Zelvo",
+          name: "Claro Tech",
           url: "/",
           description: "Enterprise software studio specialising in ERP, custom web applications, SaaS, POS and cloud infrastructure.",
         }),

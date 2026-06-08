@@ -10,6 +10,10 @@ const links = [
   { label: "Contact", href: "#contact" },
 ];
 
+function scrollTo(id: string) {
+  document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+}
+
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
@@ -60,8 +64,8 @@ export function Navbar() {
         >
           <a href="#home" className="flex items-center group">
             <img
-              src={light ? "/logo_dark.png" : "/logo_light.png"}
-              alt="Zelvo Tech Solutions"
+              src="/logo.png"
+              alt="Claro Tech Solutions"
               className="h-10 w-auto object-contain transition-opacity group-hover:opacity-85"
             />
           </a>
@@ -73,6 +77,7 @@ export function Navbar() {
                 <a
                   key={l.href}
                   href={l.href}
+                  onClick={(e) => { e.preventDefault(); scrollTo(l.href.slice(1)); }}
                   className={`relative px-3 py-2 text-sm transition-colors group ${
                     isActive ? "text-foreground" : "text-muted-foreground hover:text-foreground"
                   }`}
@@ -127,7 +132,7 @@ export function Navbar() {
                 <a
                   key={l.href}
                   href={l.href}
-                  onClick={() => setOpen(false)}
+                  onClick={() => { setOpen(false); scrollTo(l.href.slice(1)); }}
                   className={`px-3 py-2 rounded-lg text-sm transition-colors ${
                     isActive
                       ? "bg-highlight/10 text-highlight font-medium"

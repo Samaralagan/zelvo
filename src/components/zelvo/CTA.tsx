@@ -20,7 +20,7 @@ export function CTA() {
           Ready to <span className="text-gradient">automate and scale</span><br className="hidden sm:block" /> your business?
         </motion.h2>
         <p className="mt-5 text-muted-foreground max-w-xl mx-auto">
-          Let Zelvo engineer the digital foundation your company deserves.
+          Let Claro Tech engineer the digital foundation your company deserves.
         </p>
         <div className="mt-9 flex flex-col sm:flex-row items-center justify-center gap-3">
           <a

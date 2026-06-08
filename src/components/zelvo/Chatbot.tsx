@@ -6,7 +6,7 @@ type Message = { from: "bot" | "user"; text: string };
 
 const GREET: Message = {
   from: "bot",
-  text: "👋 Hi! I'm Zelvo's assistant. Ask me about our services, process, or how to get started.",
+  text: "👋 Hi! I'm Claro Tech's assistant. Ask me about our services, process, or how to get started.",
 };
 
 const RESPONSES: { match: RegExp; reply: string }[] = [
@@ -15,7 +15,7 @@ const RESPONSES: { match: RegExp; reply: string }[] = [
   { match: /price|cost|budget|quote/i, reply: "Pricing depends on scope. We offer a free consultation to give you an accurate estimate — just head to the Contact section!" },
   { match: /process|how.*work|step/i, reply: "We follow 4 phases: Discovery → Development → Deployment → Support. Each phase has clear deliverables and demos." },
   { match: /cloud|aws|infra/i, reply: "We design auto-scaling cloud infrastructure with 99.99% uptime SLAs using AWS, Cloudflare, and Docker." },
-  { match: /contact|reach|talk|consult/i, reply: "You can reach us at hello@zelvo.io or fill out the contact form on this page. We respond within one business day." },
+  { match: /contact|reach|talk|consult/i, reply: "You can reach us via the contact form on this page. We respond within one business day." },
   { match: /time|long|duration|deadline/i, reply: "Timelines vary by project. A typical web app takes 6–12 weeks. ERP systems can take 3–6 months. We'll give you a clear timeline after discovery." },
   { match: /tech|stack|language|react|java/i, reply: "Our stack includes React, Next.js, TypeScript, Java, Spring Boot, Node.js, PostgreSQL, Docker, AWS and more." },
   { match: /hello|hi|hey|good/i, reply: "Hello! 👋 How can I help you today? Feel free to ask about our services, pricing, or process." },
@@ -26,7 +26,7 @@ function getBotReply(input: string): string {
   for (const r of RESPONSES) {
     if (r.match.test(input)) return r.reply;
   }
-  return "Great question! For detailed answers, please reach out to us at hello@zelvo.io or use the contact form below. We'd love to chat!";
+  return "Great question! For detailed answers, please use the contact form below. We'd love to chat!";
 }
 
 export function Chatbot() {
@@ -71,7 +71,7 @@ export function Chatbot() {
                   <Bot className="h-4 w-4 text-highlight" />
                 </div>
                 <div>
-                  <div className="text-sm font-semibold">Zelvo Assistant</div>
+                  <div className="text-sm font-semibold">Claro Tech Assistant</div>
                   <div className="flex items-center gap-1 text-[10px] text-muted-foreground">
                     <span className="h-1.5 w-1.5 rounded-full bg-green-400 inline-block" />
                     Online

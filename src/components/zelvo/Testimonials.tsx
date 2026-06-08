@@ -4,7 +4,7 @@ import { SectionHeader } from "./Services";
 
 const items = [
   {
-    quote: "Zelvo replatformed our ERP without missing a single shipment. Communication was world-class.",
+    quote: "Claro Tech replatformed our ERP without missing a single shipment. Communication was world-class.",
     name: "Amelia Hart", role: "COO, Northwind Distribution",
   },
   {

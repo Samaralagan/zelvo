@@ -1,3 +1,4 @@
+import "./ContactFormWidget";
 import { SectionHeader } from "./Services";
 import { Mail, Phone } from "lucide-react";
 
@@ -23,22 +24,30 @@ export function Contact() {
           sub="Tell us about your project and we'll get back to you within one business day."
         />
 
-        <div className="mt-6 flex flex-col sm:flex-row gap-4">
-          {INFO.map((item) => (
-            <a
-              key={item.label}
-              href={item.href}
-              className="group flex items-center gap-4 rounded-2xl glass p-4 hover:-translate-y-0.5 hover:glow-ring transition-all"
-            >
-              <span className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/20 ring-1 ring-highlight/20 group-hover:ring-highlight/60 transition">
-                <item.icon className="h-5 w-5 text-highlight" />
-              </span>
-              <div>
-                <div className="text-xs uppercase tracking-widest text-muted-foreground">{item.label}</div>
-                <div className="text-sm font-semibold mt-0.5">{item.value}</div>
-              </div>
-            </a>
-          ))}
+        <div className="mt-10 grid lg:grid-cols-2 gap-8 items-center">
+          <div className="flex flex-col gap-4 lg:pr-4">
+            <p className="text-muted-foreground text-sm leading-relaxed">
+              Have a project in mind? Fill out the form and our team will reach out to discuss your requirements.
+            </p>
+            {INFO.map((item) => (
+              <a
+                key={item.label}
+                href={item.href}
+                className="group flex items-center gap-4 rounded-2xl p-4 border border-white/10 hover:-translate-y-0.5 transition-transform"
+                style={{ background: "var(--surface)", boxShadow: "var(--shadow-card)" }}
+              >
+                <span className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/20 ring-1 ring-highlight/20 group-hover:ring-highlight/60 transition">
+                  <item.icon className="h-5 w-5 text-highlight" />
+                </span>
+                <div>
+                  <div className="text-xs uppercase tracking-widest text-muted-foreground">{item.label}</div>
+                  <div className="text-sm font-semibold mt-0.5">{item.value}</div>
+                </div>
+              </a>
+            ))}
+          </div>
+
+          <contact-form-widget />
         </div>
       </div>
     </section>

@@ -3,6 +3,18 @@ import { ShieldCheck, Zap, GitBranch, Server, Cloud, Database } from "lucide-rea
 import { useEffect, useRef, useState } from "react";
 import { SectionHeader } from "./Services";
 
+function useInView(ref: React.RefObject<Element>) {
+  const [inView, setInView] = useState(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(([e]) => setInView(e.isIntersecting), { threshold: 0 });
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [ref]);
+  return inView;
+}
+
 /* ── Bento layout ── */
 const items = [
   { icon: Server,      title: "Industry-standard architecture", desc: "Clean architecture, DDD, event-driven systems.", visual: "arch",    span: "lg:col-span-2" },
@@ -50,13 +62,16 @@ function ArchVisual() {
 }
 
 function ShieldVisual() {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref as React.RefObject<Element>);
   const [locked, setLocked] = useState(false);
   useEffect(() => {
+    if (!inView) return;
     const iv = setInterval(() => setLocked((v) => !v), 2000);
     return () => clearInterval(iv);
-  }, []);
+  }, [inView]);
   return (
-    <div className="mt-5 flex flex-col items-center gap-2">
+    <div ref={ref} className="mt-5 flex flex-col items-center gap-2">
       <motion.div
         animate={{ scale: locked ? [1, 1.15, 1] : 1, opacity: locked ? 1 : 0.4 }}
         transition={{ duration: 0.4 }}
@@ -85,14 +100,17 @@ function ShieldVisual() {
 }
 
 function SprintVisual() {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref as React.RefObject<Element>);
   const [sprint, setSprint] = useState(0);
   const tasks = [1, 1, 1, 0, 1, 0, 1, 1];
   useEffect(() => {
+    if (!inView) return;
     const iv = setInterval(() => setSprint((s) => (s + 1) % (tasks.length + 1)), 500);
     return () => clearInterval(iv);
-  }, []);
+  }, [inView]);
   return (
-    <div className="mt-5 space-y-2">
+    <div ref={ref} className="mt-5 space-y-2">
       <div className="flex items-center justify-between text-[10px] text-muted-foreground font-mono">
         <span>Sprint {Math.floor(sprint / 4) + 1}</span>
         <span className="text-highlight">{sprint}/{tasks.length} done</span>
@@ -124,20 +142,27 @@ function SprintVisual() {
 }
 
 function HaVisual() {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref as React.RefObject<Element>);
   const [active, setActive] = useState<"a" | "b" | "fail">("a");
   useEffect(() => {
+    if (!inView) return;
+    let cancelled = false;
     const seq = async () => {
       await new Promise((r) => setTimeout(r, 1800));
+      if (cancelled) return;
       setActive("fail");
       await new Promise((r) => setTimeout(r, 700));
+      if (cancelled) return;
       setActive("b");
       await new Promise((r) => setTimeout(r, 1800));
+      if (cancelled) return;
       setActive("a");
     };
     const iv = setInterval(seq, 4400);
     seq();
-    return () => clearInterval(iv);
-  }, []);
+    return () => { cancelled = true; clearInterval(iv); };
+  }, [inView]);
 
   const nodeStyle = (id: "a" | "b") => ({
     backgroundColor:
@@ -151,7 +176,7 @@ function HaVisual() {
   });
 
   return (
-    <div className="mt-5 flex items-center justify-center gap-4">
+    <div ref={ref} className="mt-5 flex items-center justify-center gap-4">
       {(["a", "b"] as const).map((id) => (
         <motion.div
           key={id}
@@ -176,20 +201,21 @@ function HaVisual() {
 }
 
 function CloudNativeVisual() {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref as React.RefObject<Element>);
   const nodes = [
     { cx: "20%", cy: "50%" }, { cx: "50%", cy: "20%" },
     { cx: "80%", cy: "50%" }, { cx: "35%", cy: "78%" }, { cx: "65%", cy: "78%" },
   ];
-  const edges = [
-    [0,1],[1,2],[0,3],[2,4],[3,4],
-  ];
+  const edges = [[0,1],[1,2],[0,3],[2,4],[3,4]];
   const [pulse, setPulse] = useState(0);
   useEffect(() => {
+    if (!inView) return;
     const iv = setInterval(() => setPulse((v) => (v + 1) % nodes.length), 650);
     return () => clearInterval(iv);
-  }, []);
+  }, [inView]);
   return (
-    <div className="mt-5 h-20 relative">
+    <div ref={ref} className="mt-5 h-20 relative">
       <svg className="absolute inset-0 w-full h-full">
         {edges.map(([a, b], i) => (
           <line key={i}
@@ -211,14 +237,17 @@ function CloudNativeVisual() {
 }
 
 function DataVisual() {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref as React.RefObject<Element>);
   const [step, setStep] = useState(0);
   const stages = ["Ingest", "Transform", "Enrich", "Serve"];
   useEffect(() => {
+    if (!inView) return;
     const iv = setInterval(() => setStep((s) => (s + 1) % stages.length), 900);
     return () => clearInterval(iv);
-  }, []);
+  }, [inView]);
   return (
-    <div className="mt-5 flex items-center gap-1">
+    <div ref={ref} className="mt-5 flex items-center gap-1">
       {stages.map((s, i) => (
         <div key={s} className="flex items-center gap-1 flex-1">
           <motion.div
@@ -310,7 +339,7 @@ export function Why() {
     <section className="relative py-7 sm:py-10">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <SectionHeader
-          eyebrow="Why Zelvo"
+          eyebrow="Why Claro Tech"
           title="Built for serious, large-scale systems."
           sub="We pair senior engineering with disciplined process — so the platforms we ship don't just launch, they last."
         />

@@ -1,5 +1,17 @@
 import { motion, animate, useMotionValue, useTransform, useSpring } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
+
+function useInView(ref: React.RefObject<Element>) {
+  const [inView, setInView] = useState(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(([e]) => setInView(e.isIntersecting), { threshold: 0 });
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [ref]);
+  return inView;
+}
 import {
   Code2, Building2, Globe, RefreshCw, ScanLine, CloudCog,
 } from "lucide-react";
@@ -52,7 +64,7 @@ export function Services() {
         <SectionHeader
           eyebrow="Services"
           title="A complete digital engineering practice."
-          sub="From first prototype to global rollout — Zelvo ships software that moves the business."
+          sub="From first prototype to global rollout — Claro Tech ships software that moves the business."
         />
 
         <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -177,12 +189,15 @@ const API_LINES = [
 ];
 
 function ApiVisual() {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref as React.RefObject<Element>);
   const [visibleCount, setVisibleCount] = useState(4);
   const [typed, setTyped] = useState("");
   const lineIndex = visibleCount % API_LINES.length;
   const target = API_LINES[lineIndex].text;
 
   useEffect(() => {
+    if (!inView) return;
     setTyped("");
     let i = 0;
     const iv = setInterval(() => {
@@ -194,12 +209,12 @@ function ApiVisual() {
       }
     }, 38);
     return () => clearInterval(iv);
-  }, [visibleCount]);
+  }, [visibleCount, inView]);
 
   const shown = API_LINES.slice(Math.max(0, visibleCount - 3), visibleCount);
 
   return (
-    <div className="h-24 rounded-lg bg-background/50 border border-border p-3 font-mono text-[10px] leading-relaxed text-muted-foreground overflow-hidden">
+    <div ref={ref} className="h-24 rounded-lg bg-background/50 border border-border p-3 font-mono text-[10px] leading-relaxed text-muted-foreground overflow-hidden">
       {shown.map((l, i) => (
         <div key={i} className={l.highlight ? "text-highlight" : ""}>{l.text}</div>
       ))}
@@ -215,14 +230,17 @@ const BAR_HEIGHTS = [40, 60, 35, 80, 55, 90, 70, 95, 60, 100];
 const BAR_HEIGHTS_ALT = [70, 45, 85, 50, 95, 40, 80, 55, 90, 65];
 
 function ChartVisual() {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref as React.RefObject<Element>);
   const [toggled, setToggled] = useState(false);
   useEffect(() => {
+    if (!inView) return;
     const iv = setInterval(() => setToggled((v) => !v), 1800);
     return () => clearInterval(iv);
-  }, []);
+  }, [inView]);
   const heights = toggled ? BAR_HEIGHTS_ALT : BAR_HEIGHTS;
   return (
-    <div className="h-24 rounded-lg bg-background/50 border border-border p-3 flex items-end gap-1.5">
+    <div ref={ref} className="h-24 rounded-lg bg-background/50 border border-border p-3 flex items-end gap-1.5">
       {heights.map((h, i) => (
         <motion.div
           key={i}
@@ -238,9 +256,12 @@ function ChartVisual() {
 
 /* ── Grid / Corporate Visual ── */
 function GridVisual() {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref as React.RefObject<Element>);
   const scanY = useMotionValue(0);
   const opacity = useTransform(scanY, [0, 40, 80, 100], [0, 1, 1, 0]);
   useEffect(() => {
+    if (!inView) return;
     const ctrl = animate(scanY, [0, 100], {
       duration: 2.2,
       repeat: Infinity,
@@ -248,10 +269,10 @@ function GridVisual() {
       ease: "linear",
     });
     return () => ctrl.stop();
-  }, []);
+  }, [inView]);
   const dots = Array.from({ length: 24 });
   return (
-    <div className="h-24 rounded-lg bg-background/50 border border-border relative overflow-hidden">
+    <div ref={ref} className="h-24 rounded-lg bg-background/50 border border-border relative overflow-hidden">
       <div className="absolute inset-2 grid grid-cols-6 grid-rows-4 gap-1.5">
         {dots.map((_, i) => (
           <div key={i} className="rounded-full bg-muted-foreground/25 w-1.5 h-1.5 mx-auto my-auto" />
@@ -271,8 +292,11 @@ function GridVisual() {
 
 /* ── Refresh / Legacy Visual ── */
 function RefreshVisual() {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref as React.RefObject<Element>);
   const [phase, setPhase] = useState<"old" | "migrating" | "new">("old");
   useEffect(() => {
+    if (!inView) return;
     const cycle = () => {
       setPhase("migrating");
       setTimeout(() => setPhase("new"), 900);
@@ -280,10 +304,10 @@ function RefreshVisual() {
     };
     const iv = setInterval(cycle, 3200);
     return () => clearInterval(iv);
-  }, []);
+  }, [inView]);
   const rows = ["w-3/4", "w-1/2", "w-2/3"];
   return (
-    <div className="h-24 rounded-lg bg-background/50 border border-border p-3 flex items-center gap-3">
+    <div ref={ref} className="h-24 rounded-lg bg-background/50 border border-border p-3 flex items-center gap-3">
       <div className="flex-1 space-y-1.5">
         {rows.map((w, i) => (
           <motion.div
@@ -316,17 +340,20 @@ function RefreshVisual() {
 
 /* ── POS Visual ── */
 function PosVisual() {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref as React.RefObject<Element>);
   const [active, setActive] = useState(-1);
   useEffect(() => {
+    if (!inView) return;
     let i = 0;
     const iv = setInterval(() => {
       setActive(i % 9);
       i++;
     }, 220);
     return () => clearInterval(iv);
-  }, []);
+  }, [inView]);
   return (
-    <div className="h-24 rounded-lg bg-background/50 border border-border p-3 grid grid-cols-3 gap-1.5">
+    <div ref={ref} className="h-24 rounded-lg bg-background/50 border border-border p-3 grid grid-cols-3 gap-1.5">
       {Array.from({ length: 9 }).map((_, i) => (
         <motion.div
           key={i}
@@ -361,13 +388,16 @@ const EDGES = [
 ];
 
 function CloudVisual() {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref as React.RefObject<Element>);
   const [pulseIdx, setPulseIdx] = useState(0);
   useEffect(() => {
+    if (!inView) return;
     const iv = setInterval(() => setPulseIdx((v) => (v + 1) % NODES.length), 700);
     return () => clearInterval(iv);
-  }, []);
+  }, [inView]);
   return (
-    <div className="h-24 rounded-lg bg-background/50 border border-border relative overflow-hidden">
+    <div ref={ref} className="h-24 rounded-lg bg-background/50 border border-border relative overflow-hidden">
       <svg className="absolute inset-0 w-full h-full">
         {EDGES.map((e, i) => (
           <motion.line
