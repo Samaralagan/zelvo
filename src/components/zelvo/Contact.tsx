@@ -1,4 +1,4 @@
-import "./ContactFormWidget?side-effect";
+import "@/components/zelvo/ContactFormWidget";
 import { SectionHeader } from "./Services";
 import { Mail, Phone } from "lucide-react";
 

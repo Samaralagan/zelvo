@@ -13,5 +13,10 @@ export default defineConfig({
   ],
   build: {
     outDir: "dist",
+    rollupOptions: {
+      treeshake: {
+        moduleSideEffects: (id) => id.includes("ContactFormWidget"),
+      },
+    },
   },
 });
