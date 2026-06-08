@@ -93,7 +93,22 @@ const CSS = `
     border-color: var(--highlight, oklch(0.88 0.18 185));
     background: oklch(0.5 0 0 / 12%);
   }
+  input.invalid, textarea.invalid {
+    border-color: oklch(0.65 0.22 27);
+  }
+  input.valid, textarea.valid {
+    border-color: oklch(0.72 0.17 155);
+  }
   textarea { resize: vertical; min-height: 110px; }
+
+  .field-error {
+    font-size: 0.72rem;
+    color: oklch(0.65 0.22 27);
+    font-family: inherit;
+    min-height: 1rem;
+    display: none;
+  }
+  .field-error.show { display: block; }
 
   .actions {
     display: flex;
@@ -173,19 +188,23 @@ const HTML = `
       <div class="field">
         <label>Name <span style="color:var(--highlight,oklch(0.88 0.18 185))">*</span></label>
         <input id="f-name" name="name" type="text" placeholder="Your name" autocomplete="name" />
+        <span id="f-name-err" class="field-error"></span>
       </div>
       <div class="field">
         <label>Email <span style="color:var(--highlight,oklch(0.88 0.18 185))">*</span></label>
         <input id="f-email" name="email" type="email" placeholder="you@example.com" autocomplete="email" />
+        <span id="f-email-err" class="field-error"></span>
       </div>
     </div>
     <div class="field">
       <label>Contact Number <span class="opt">(Optional)</span></label>
       <input id="f-phone" name="phone" type="tel" placeholder="+1 234 567 8900" autocomplete="tel" />
+      <span id="f-phone-err" class="field-error"></span>
     </div>
     <div class="field">
       <label>Reason <span style="color:var(--highlight,oklch(0.88 0.18 185))">*</span></label>
       <textarea id="f-reason" name="reason" placeholder="Tell us about your project\u2026"></textarea>
+      <span id="f-reason-err" class="field-error"></span>
     </div>
     <div id="f-msg" class="msg"></div>
     <div class="actions">
@@ -199,22 +218,69 @@ class ContactFormWidget extends HTMLElement {
     const shadow = this.attachShadow({ mode: "open" });
     shadow.innerHTML = `<style>${CSS}</style>${HTML}`;
 
-    const form    = shadow.getElementById("cf") as HTMLFormElement;
-    const btn     = shadow.getElementById("f-btn") as HTMLButtonElement;
-    const msgEl   = shadow.getElementById("f-msg") as HTMLDivElement;
-    const name    = shadow.getElementById("f-name") as HTMLInputElement;
-    const email   = shadow.getElementById("f-email") as HTMLInputElement;
-    const phone   = shadow.getElementById("f-phone") as HTMLInputElement;
-    const reason  = shadow.getElementById("f-reason") as HTMLTextAreaElement;
+    const form     = shadow.getElementById("cf") as HTMLFormElement;
+    const btn      = shadow.getElementById("f-btn") as HTMLButtonElement;
+    const msgEl    = shadow.getElementById("f-msg") as HTMLDivElement;
+    const name     = shadow.getElementById("f-name") as HTMLInputElement;
+    const email    = shadow.getElementById("f-email") as HTMLInputElement;
+    const phone    = shadow.getElementById("f-phone") as HTMLInputElement;
+    const reason   = shadow.getElementById("f-reason") as HTMLTextAreaElement;
+    const nameErr  = shadow.getElementById("f-name-err") as HTMLSpanElement;
+    const emailErr = shadow.getElementById("f-email-err") as HTMLSpanElement;
+    const phoneErr = shadow.getElementById("f-phone-err") as HTMLSpanElement;
+    const reasonErr = shadow.getElementById("f-reason-err") as HTMLSpanElement;
+
+    function setFieldError(input: HTMLInputElement | HTMLTextAreaElement, errEl: HTMLSpanElement, msg: string) {
+      if (msg) {
+        input.className = "invalid";
+        errEl.textContent = msg;
+        errEl.className = "field-error show";
+      } else {
+        input.className = "valid";
+        errEl.textContent = "";
+        errEl.className = "field-error";
+      }
+    }
+
+    function validateName() {
+      const v = name.value.trim();
+      if (!v) return setFieldError(name, nameErr, "Name is required.");
+      if (v.length < 2) return setFieldError(name, nameErr, "Name must be at least 2 characters.");
+      setFieldError(name, nameErr, "");
+    }
+
+    function validateEmail() {
+      const v = email.value.trim();
+      if (!v) return setFieldError(email, emailErr, "Email is required.");
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) return setFieldError(email, emailErr, "Enter a valid email address.");
+      setFieldError(email, emailErr, "");
+    }
+
+    function validatePhone() {
+      const v = phone.value.trim();
+      if (v && !/^[\+]?[\d\s\-\(\)]{7,15}$/.test(v)) return setFieldError(phone, phoneErr, "Enter a valid phone number.");
+      setFieldError(phone, phoneErr, "");
+    }
+
+    function validateReason() {
+      const v = reason.value.trim();
+      if (!v) return setFieldError(reason, reasonErr, "Please describe your project.");
+      if (v.length < 10) return setFieldError(reason, reasonErr, "Please provide at least 10 characters.");
+      setFieldError(reason, reasonErr, "");
+    }
+
+    name.addEventListener("blur", validateName);
+    email.addEventListener("blur", validateEmail);
+    phone.addEventListener("blur", validatePhone);
+    reason.addEventListener("blur", validateReason);
 
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
       msgEl.className = "msg";
-      if (!name.value.trim() || !email.value.trim() || !reason.value.trim()) {
-        msgEl.textContent = "Please fill in all required fields.";
-        msgEl.className = "msg error show";
-        return;
-      }
+      validateName(); validateEmail(); validatePhone(); validateReason();
+      if (name.classList.contains("invalid") || email.classList.contains("invalid") ||
+          phone.classList.contains("invalid") || reason.classList.contains("invalid")) return;
+      if (!name.value.trim() || !email.value.trim() || !reason.value.trim()) return;
       btn.disabled = true;
       btn.textContent = "Sending\u2026";
       try {
@@ -233,6 +299,8 @@ class ContactFormWidget extends HTMLElement {
           msgEl.className = "msg success show";
           btn.textContent = "Sent!";
           form.reset();
+          [name, email, phone, reason].forEach(el => { el.className = ""; });
+          [nameErr, emailErr, phoneErr, reasonErr].forEach(el => { el.className = "field-error"; });
         } else {
           throw new Error("bad response");
         }
