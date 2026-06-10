@@ -5,6 +5,7 @@ import { Services } from "@/components/zelvo/Services";
 import { Why } from "@/components/zelvo/Why";
 import { Process } from "@/components/zelvo/Process";
 import { Tech } from "@/components/zelvo/Tech";
+import { Work } from "@/components/zelvo/Work";
 import { Security } from "@/components/zelvo/Security";
 import { Contact } from "@/components/zelvo/Contact";
 import { Footer } from "@/components/zelvo/Footer";
@@ -59,6 +60,7 @@ function Index() {
       <Why />
       <Process />
       <Tech />
+      <Work />
       <Security />
       <Contact />
       <Footer />

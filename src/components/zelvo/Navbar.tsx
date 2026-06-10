@@ -7,6 +7,7 @@ const links = [
   { label: "Services", href: "#services" },
   { label: "Process", href: "#process" },
   { label: "Technologies", href: "#tech" },
+  { label: "Our Work", href: "#work" },
   { label: "Contact", href: "#contact" },
 ];
 
@@ -33,18 +34,18 @@ export function Navbar() {
 
   useEffect(() => {
     const ids = links.map((l) => l.href.slice(1));
-    const observers: IntersectionObserver[] = [];
-    ids.forEach((id) => {
-      const el = document.getElementById(id);
-      if (!el) return;
-      const obs = new IntersectionObserver(
-        ([entry]) => { if (entry.isIntersecting) setActive(`#${id}`); },
-        { rootMargin: "-40% 0px -55% 0px", threshold: 0 }
-      );
-      obs.observe(el);
-      observers.push(obs);
-    });
-    return () => observers.forEach((o) => o.disconnect());
+    function onScroll() {
+      const scrollY = window.scrollY + window.innerHeight * 0.35;
+      let current = ids[0];
+      for (const id of ids) {
+        const el = document.getElementById(id);
+        if (el && el.offsetTop <= scrollY) current = id;
+      }
+      setActive(`#${current}`);
+    }
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   return (
