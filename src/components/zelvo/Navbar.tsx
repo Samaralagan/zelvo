@@ -5,9 +5,10 @@ import { Menu, X, Moon, Sun } from "lucide-react";
 const links = [
   { label: "Home", href: "#home" },
   { label: "Services", href: "#services" },
+  { label: "Our Work", href: "#work" },
   { label: "Process", href: "#process" },
   { label: "Technologies", href: "#tech" },
-  { label: "Our Work", href: "#work" },
+  
   { label: "Contact", href: "#contact" },
 ];
 

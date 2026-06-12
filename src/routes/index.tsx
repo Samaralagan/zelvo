@@ -57,11 +57,11 @@ function Index() {
       <Navbar />
       <Hero />
       <Services />
-      <Why />
+      <Work />
       <Process />
       <Tech />
-      <Work />
-      <Security />
+      
+      
       <Contact />
       <Footer />
       <CookieBanner />

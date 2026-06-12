@@ -3,8 +3,8 @@
   import { Mail, Phone } from "lucide-react";
 
   const INFO = [
-    { icon: Mail, label: "Email us", value: "abiram.ketheeswaran@gmail.com", href: "mailto:abiram.ketheeswaran@gmail.com" },
-    { icon: Phone, label: "Call us", value: "+94 773165797", href: "tel:+94773165797" },
+    { icon: Mail, label: "Email us", value: "info@clarotech.dev", href: "mailto:info@clarotech.dev" },
+    { icon: Phone, label: "Call us", value: "+61 409 670 921", href: "tel:+61409670921" },
   ];
 
   export function Contact() {
