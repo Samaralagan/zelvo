@@ -4,7 +4,7 @@
  * can interfere with typing in the input fields.
  */
 
-const ENDPOINT = "https://formspree.io/f/mzdqrkpa";
+const ENDPOINT = "https://formspree.io/f/mlgkowbd";
 
 const CSS = `
   *, *::before, *::after { box-sizing: border-box; }
