@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 
-const ENDPOINT = "https://formspree.io/f/mzdqrkpa";
+const ENDPOINT = "https://formspree.io/f/mlgkowbd";
 
 export function ContactForm() {
   const nameRef   = useRef<HTMLInputElement>(null);
